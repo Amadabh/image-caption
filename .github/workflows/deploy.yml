@@ -1,0 +1,57 @@
+name: Deploy From local to EC2
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      
+      - name: Copy Code to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ${{secrets.EC2_USER}}
+          key: ${{secrets.EC2_SSH_KEY}}
+          source: "."
+          target: "~/app"
+        
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Install deps if missing
+            if ! command -v docker &> /dev/null; then
+              sudo apt-get update
+              sudo apt-get install -y docker.io git-lfs
+              sudo systemctl enable docker
+              sudo systemctl start docker
+              git lfs install
+            fi
+
+            # Clone or update repo
+            if [ ! -d "~/app/.git" ]; then
+              git clone https://github.com/Amadabh/image-caption.git ~/app
+            else
+              cd ~/app && git pull
+            fi
+
+            # Ensure LFS files are pulled
+            cd ~/app
+            git lfs pull
+
+            # Rebuild + restart container
+            docker build -t myapp .
+            docker stop myapp-container || true
+            docker rm myapp-container || true
+            docker run -d --name myapp-container -p 8000:8000 -p 8501:8501 myapp
