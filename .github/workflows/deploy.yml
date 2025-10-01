@@ -35,9 +35,14 @@ jobs:
             # Ensure LFS files are pulled
             cd /home/${USER}/app
             git lfs pull
+            ls -lh 
 
             # Rebuild + restart container
             sudo docker build -t myapp .
             sudo docker stop myapp-container || true
             sudo docker rm myapp-container || true
-            sudo docker run -d --name myapp-container -p 8000:8000 -p 8501:8501 myapp
+            sudo docker run -d \
+            --name myapp-container \
+            -p 8000:8000 -p 8501:8501 \
+            -v /home/${USER}/app/onnx-image-captioning-model-quantized.tar.gz:/app/onnx-image-captioning-model-quantized.tar.gz \
+            myapp
