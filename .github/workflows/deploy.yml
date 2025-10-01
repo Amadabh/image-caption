@@ -46,3 +46,4 @@ jobs:
             -p 8000:8000 -p 8501:8501 \
             -v /home/${USER}/app/onnx-image-captioning-model-quantized.tar.gz:/app/onnx-image-captioning-model-quantized.tar.gz \
             myapp
+
