@@ -18,8 +18,8 @@ RUN uv pip install --system --no-cache-dir -r requirements.txt
  
 
 # Copy compressed model
-COPY onnx-image-captioning-model-quantized.tar.gz .
-RUN tar -xzf onnx-image-captioning-model-quantized.tar.gz && rm onnx-image-captioning-model-quantized.tar.gz
+# COPY onnx-image-captioning-model-quantized.tar.gz .
+# RUN tar -xzf onnx-image-captioning-model-quantized.tar.gz && rm onnx-image-captioning-model-quantized.tar.gz
 
 
 COPY main.py app.py start.sh ./
