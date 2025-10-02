@@ -36,6 +36,40 @@ CMD ["./start.sh"]
 
 # WORKDIR /app
 
+# # Copy only requirements first for caching
+# COPY requirements.txt ./
+
+# # Install uvicorn
+# RUN pip install uv
+
+# # Install PyTorch CPU version
+# RUN uv pip install --system --no-cache-dir \
+#     torch==2.2.0+cpu torchvision==0.17.0+cpu \
+#     --find-links https://download.pytorch.org/whl/torch_stable.html
+
+# # Reinstall compatible numpy
+# RUN uv pip install --system --no-cache-dir "numpy<2" --force-reinstall
+
+# # Install remaining requirements
+# RUN uv pip install --system --no-cache-dir -r requirements.txt
+
+# # Copy application code
+# COPY main.py app.py start.sh ./
+
+# # Make start.sh executable
+# RUN chmod +x start.sh
+
+# # Expose ports for FastAPI and Streamlit
+# EXPOSE 8000 8501
+
+# # Default command runs start.sh
+# CMD ["./start.sh"]
+
+
+# FROM python:3.10-slim
+
+# WORKDIR /app
+
 # COPY requirements.txt .
 
 # RUN pip install uv
