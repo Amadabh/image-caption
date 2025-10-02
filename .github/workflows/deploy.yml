@@ -32,7 +32,7 @@ jobs:
             else
               cd /home/ubuntu/app && git fetch origin && git reset --hard origin/main
             fi
-
+            sudo docker system prune -a
 
             # Ensure LFS files are pulled
             cd /home/ubuntu/app
