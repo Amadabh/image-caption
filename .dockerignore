@@ -1,0 +1,40 @@
+# Exclude the tar.gz archive (we'll use the extracted folder)
+*.tar.gz
+
+# Exclude ONNX model folder (mounted as volume, don't include in image)
+onnx-image-captioning-model-quantized/
+
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+EOF

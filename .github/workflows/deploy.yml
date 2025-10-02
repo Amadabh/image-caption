@@ -94,15 +94,19 @@ jobs:
             if [ ! -d "/home/ubuntu/app/onnx-image-captioning-model-quantized" ]; then
               echo "Extracting ONNX model..."
               tar -xzf onnx-image-captioning-model-quantized.tar.gz
-              rm -f onnx-image-captioning-model-quantized.tar.gz
+              
             else
               echo "ONNX folder exists, skipping extraction"
             fi
+            rm -f onnx-image-captioning-model-quantized.tar.gz
+
 
             # Clean old containers/images
-            sudo docker system prune -a -f
+            sudo docker system prune -a --volumes -f
             sudo docker stop myapp-container || true
             sudo docker rm myapp-container || true
+
+            sudo rm -rf /tmp/*
 
             # Rebuild Docker image
             sudo docker build -t myapp .
